@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORKSHOP · Power Automate & AI — Mission M.A.L.V.</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss-cdn@3.4.1/tailwindcss.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#060e18',
+                            800: '#0a1628',
+                            700: '#102a4c',
+                            600: '#183b68',
+                            500: '#22528c',
+                        },
+                        cyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            accent: '#00f0ff',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            accent: '#facc15',
+                        },
+                        stamp: {
+                            red: '#ef4444',
+                            amber: '#f59e0b'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                        stencil: ['"Special Elite"', 'cursive', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a1628;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Subtle grid & circuit background texture */
+        .tech-bg {
+            background-image: 
+                linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* Classified Stamp Watermark */
+        .classified-stamp {
+            position: absolute;
+            border: 2px dashed rgba(239, 68, 68, 0.4);
+            color: rgba(239, 68, 68, 0.5);
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0.25rem 0.75rem;
+            letter-spacing: 0.1em;
+            pointer-events: none;
+            user-select: none;
+            transform: rotate(-12deg);
+            z-index: 10;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .gold-placeholder {
+            color: #facc15;
+            background-color: rgba(250, 204, 21, 0.1);
+            border: 1px dashed rgba(250, 204, 21, 0.4);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* Redaction box styling */
+        .redacted {
+            background-color: #050b14;
+            color: #050b14;
+            border-radius: 3px;
+            user-select: none;
+            position: relative;
+            display: inline-block;
+            transition: all 0.5s ease-in-out;
+            border: 1px solid #102a4c;
+        }
+
+        .redacted::after {
+            content: "█ █ █ █ █ █ █ █";
+            color: #1a2f4c;
+            position: absolute;
+            left: 4px;
+            top: 0;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 2px;
+        }
+
+        .revealed .redacted {
+            background-color: rgba(34, 211, 238, 0.08);
+            color: #facc15;
+            border: 1px dashed rgba(34, 211, 238, 0.3);
+            padding: 0.1rem 0.4rem;
+        }
+
+        .revealed .redacted::after {
+            display: none;
+        }
+
+        /* Scanline effect */
+        .scanlines {
+            position: relative;
+            overflow: hidden;
+        }
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+            background-size: 100% 4px;
+            z-index: 20;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060e18;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #183b68;
+            border-radius: 4px;
+            border: 1px solid #22d3ee33;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #22528c;
+        }
+    </style>
+
+<script>(window.BOOMR_mq=window.BOOMR_mq||[]).push(["addVar",{"rua.upush":"false","rua.cpush":"false","rua.upre":"false","rua.cpre":"false","rua.uprl":"false","rua.cprl":"false","rua.cprf":"false","rua.trans":"","rua.cook":"false","rua.ims":"false","rua.ufprl":"false","rua.cfprl":"false","rua.isuxp":"false","rua.texp":"norulematch","rua.ceh":"false","rua.ueh":"false","rua.ieh.st":"0"}]);</script>
+                                <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("False"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="FUH8N-CDUVM-4DQS5-MSY94-6X9AF",function(){function e(){if(!i){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,o.parentNode.appendChild(e),i=!0}}function t(e){i=!0;var n,t,a,r,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(o.parentNode,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",r=(a.frameElement||a).style,r.width=0,r.height=0,r.border=0,r.display="none",o.parentNode.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void(0);",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=12,window.BOOMR.url=n+"FUH8N-CDUVM-4DQS5-MSY94-6X9AF";var o=document.currentScript||document.getElementsByTagName("script")[0],i=!1,r=document.createElement("link");if(r.relList&&"function"==typeof r.relList.supports&&r.relList.supports("preload")&&"as"in r)window.BOOMR.snippetMethod="p",r.href=window.BOOMR.url,r.rel="preload",r.as="script",r.addEventListener("load",e),r.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!i)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),o.parentNode.appendChild(r);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="",a="uxq4vws7muoru2xav2na-f-ea17b0af9-clientnsv4-s.akamaihd.net",o="false"=="true"?2:1,i={"ak.v":"41","ak.cp":"1651733","ak.ai":parseInt("1063671",10),"ak.ol":"0","ak.cr":17,"ak.ipv":4,"ak.proto":"h2","ak.rid":"15cad2a","ak.r":50475,"ak.a2":n,"ak.m":"dsca","ak.n":"essl","ak.cport":56539,"ak.gh":"2.22.150.142","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"","ak.t":"1793109658","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==6KkmTziFGvw/1mQzkEDNqJbKIT3y7U78jzLcAKoQBExYBOfl4mJRM06tjUc2oSq/0gy8NR8AZ08mcKOotre2s1InfRmZpdQJWrII2P6KEQ8mCxh/fO5y3Dv1e5nM2feog4VSUPjXJFu8JyjfRCrpXXPskxVCvmAdrt2AS1TChevKLu/cy1qNNGIepomaHQBGxqvueiGZHGoPT2sACsIxTuvMhwdfIlHBQXv1O4F3/yXb3WLD30pJ3HTtlKfk+XuS1iEt0oQjKMEDekMcv7RG5i6bkTAuKIHrPOIqjrvh7CJ05wue+pbkHsEq3T3iQgMwcDRJiyqk3Y9cvyHCYTjU9vMVyPQeIqZ/QvQQIcOclpb+yAJCxDQd3zNcqpY3w7/VLGOehBbtRg7+vZcz8rQ9EPNyehjcfZV5dN+E1AwpRSw=","ak.pv":"3","ak.dpoabenc":"","ak.tf":o};if(""!==t)i["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))i["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(i)},rv:function(){var e=["ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:i,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script></head>
+<body class="tech-bg min-h-screen text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-navy-900">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-navy-900/90 backdrop-blur-md border-b border-cyan-500/20 shadow-lg shadow-cyan-950/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded bg-cyan-500/10 border border-cyan-400/40 flex items-center justify-center text-cyan-400 font-mono font-bold text-sm">
+                    M
+                </div>
+                <div>
+                    <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest block">Mission M.A.L.V.</span>
+                    <span class="text-sm font-semibold tracking-wide text-slate-200">Trainee Dossier</span>
+                </div>
+            </div>
+
+            <!-- Nav Links -->
+            <nav class="hidden md:flex items-center space-x-5 text-xs font-mono uppercase tracking-wider">
+                <a href="#hero" class="text-slate-400 hover:text-cyan-400 transition-colors">01. Cover</a>
+                <a href="#context" class="text-slate-400 hover:text-cyan-400 transition-colors">02. Context</a>
+                <a href="#objective" class="text-slate-400 hover:text-cyan-400 transition-colors">03. Objective</a>
+                <a href="#caffe" class="text-slate-400 hover:text-cyan-400 transition-colors">04. C.A.F.F.E. Guide</a>
+                <a href="#prompt-template" class="text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1.5 bg-cyan-950/60 px-3 py-1.5 rounded border border-cyan-500/30">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                    05. Validate Prompt
+                </a>
+                <a href="#build-flow" class="text-slate-400 hover:text-cyan-400 transition-colors">06. Build Flow</a>
+            </nav>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center space-x-2">
+                <a href="#prompt-template" class="text-xs font-mono bg-cyan-950 text-cyan-400 border border-cyan-500/40 px-2.5 py-1.5 rounded">
+                    Decrypt
+                </a>
+                <a href="#build-flow" class="text-xs font-mono bg-navy-800 text-slate-300 border border-slate-700 px-2.5 py-1.5 rounded">
+                    Build
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-24">
+
+        <!-- SECTION 1: COVER / HERO -->
+        <section id="hero" class="relative bg-navy-800/80 border border-cyan-500/30 rounded-xl p-8 sm:p-12 shadow-2xl overflow-hidden">
+            <!-- Confidential corner stamps -->
+            <div class="classified-stamp top-4 right-4">
+                <i data-feather="shield" class="w-3 h-3"></i> CONFIDENTIAL
+            </div>
+            <div class="classified-stamp bottom-4 left-4 hidden sm:flex">
+                <i data-feather="lock" class="w-3 h-3"></i> LEVEL 1 CLEARANCE
+            </div>
+
+            <!-- Background subtle grid accent -->
+            <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 max-w-3xl space-y-6">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 font-mono text-xs tracking-wider uppercase">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                    <span>Trainee Guide • Official Document</span>
+                </div>
+
+                <div class="space-y-2">
+                    <h1 class="text-xs sm:text-sm font-mono text-cyan-400 tracking-widest uppercase">WORKSHOP · Power Automate & AI</h1>
+                    <h2 class="text-3xl sm:text-5xl font-bold tracking-tight text-white font-sans">
+                        MISSION: M.A.L.V.
+                    </h2>
+                    <p class="text-lg sm:text-xl text-slate-300 font-medium">
+                        <strong class="text-cyan-400 font-bold">M</strong>ission <strong class="text-cyan-400 font-bold">A</strong>utomation & <strong class="text-cyan-400 font-bold">L</strong>ogistics <strong class="text-cyan-400 font-bold">V</strong>anguard
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-lg bg-navy-900/80 border border-cyan-500/20 font-mono text-sm text-cyan-300 space-y-1">
+                    <div class="text-slate-400 text-xs">OPERATION VECTOR:</div>
+                    <div class="text-base font-semibold">Operation 1: Very Basic Automatic Encrypted Mail Creation</div>
+                    <div class="text-xs text-slate-400 pt-2 flex items-center gap-2 flex-wrap">
+                        <span class="text-cyan-400">Prompt Creation</span> 
+                        <span>→</span> 
+                        <span class="text-cyan-400">Ai Instructions</span> 
+                        <span>→</span> 
+                        <span class="text-cyan-400">Power Automate Creation Applications</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div class="bg-navy-900/50 border border-slate-700/50 rounded-lg p-4 flex items-center space-x-4">
+                        <div class="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-cyan-400">
+                            <i data-feather="clock" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-mono text-slate-400 uppercase tracking-wider">Duration</div>
+                            <div class="text-lg font-bold text-white">20 min</div>
+                        </div>
+                    </div>
+                    <div class="bg-navy-900/50 border border-slate-700/50 rounded-lg p-4 flex items-center space-x-4">
+                        <div class="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-cyan-400">
+                            <i data-feather="award" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-mono text-slate-400 uppercase tracking-wider">Level</div>
+                            <div class="text-sm font-semibold text-white">Beginner — no technical knowledge needed</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex items-center justify-between border-t border-slate-800 text-xs font-mono text-slate-400">
+                    <span>HIGH TECH SPY AGENCY CONFIDENTIAL</span>
+                    <span class="text-cyan-400">OFFICIAL DOSSIER</span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 2: CONTEXT -->
+        <section id="context" class="relative bg-navy-800/80 border border-cyan-500/30 rounded-xl p-6 sm:p-10 shadow-xl space-y-8">
+            <div class="classified-stamp top-4 right-4">
+                <i data-feather="shield" class="w-3 h-3"></i> CONFIDENTIAL
+            </div>
+
+            <div class="border-b border-cyan-500/20 pb-4 flex justify-between items-end">
+                <div>
+                    <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">Section 01</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">1. Context</h3>
+                </div>
+                <span class="font-mono text-xs text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+
+            <!-- Briefing Box -->
+            <div class="bg-navy-900/90 border-l-4 border-cyan-400 p-6 rounded-r-lg space-y-4 font-sans text-slate-200">
+                <div class="font-mono text-xs text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                    <i data-feather="terminal" class="w-4 h-4"></i> Operative Briefing
+                </div>
+                <p class="text-base leading-relaxed">
+                    Welcome to the <strong class="text-white font-semibold">HIGH-TECH COMMAND SPY AGENCY</strong>. You have been selected for the M.A.L.V. Mission. You have Level 1 clearance.
+                </p>
+                <p class="text-sm leading-relaxed text-slate-300">
+                    Next Monday at 9:00 AM, our field operative forces launch a critical operation. They need the latest encrypted intel delivered to them instantly so they can execute their objectives safely.
+                </p>
+                <p class="text-sm font-medium text-white italic">
+                    The Agency is counting on you.
+                </p>
+            </div>
+
+            <!-- Resources Table -->
+            <div class="space-y-3">
+                <h4 class="font-mono text-xs text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                    <i data-feather="database" class="w-4 h-4"></i> Resources
+                </h4>
+                
+                <div class="overflow-x-auto border border-cyan-500/20 rounded-lg bg-navy-900/60">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-cyan-500/20 bg-navy-900 font-mono text-xs text-cyan-300 uppercase tracking-wider">
+                                <th class="p-4 w-1/4">Resources</th>
+                                <th class="p-4 w-3/4">Content</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 text-slate-300">
+                            <tr class="hover:bg-navy-900/40 transition-colors">
+                                <td class="p-4 font-semibold text-white flex items-center gap-2">
+                                    <span class="text-xl">🤖</span> 
+                                    <a href="https://maia.lvmh.com/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 underline decoration-cyan-500/50 underline-offset-4 transition-colors font-mono">MAIA</a>
+                                </td>
+                                <td class="p-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                    You are assigned an AI Cryptanalyst for this mission. You can feed her raw intel files, work with her to draft your automation logic, and consult her whenever you hit a roadblock in Power Automate.
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-navy-900/40 transition-colors">
+                                <td class="p-4 font-semibold text-white flex items-center gap-2">
+                                    <span class="text-xl">📁</span> 
+                                    <a href="https://louisvuittonmalletier.sharepoint.com/:x:/r/sites/eu-GaeTrial/Shared%20Documents/WORKSHOP%20AUTOMATE%20AI/FLOW_FILE.xlsx?d=w3f09cdc4324f4573ba12401f663c872e&csf=1&web=1&e=akKehz" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 underline decoration-cyan-500/50 underline-offset-4 transition-colors font-mono">FLOW_FILE.xlsx</a>
+                                </td>
+                                <td class="p-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                    Encrypted intel to be transmitted directly to our field operatives. 
+                                    <span class="text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 inline-block mt-1">WARNING: Level 2 clearance required to access or view decrypted data.</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-navy-900/40 transition-colors">
+                                <td class="p-4 font-semibold text-white flex items-center gap-2">
+                                    <span class="text-xl">👥</span> Field Operatives
+                                </td>
+                                <td class="p-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                    If you need assistance during the mission, feel free to ask Agent 002 (Codename: Leofrance) or Agent 005 (Codename: Nilvia), who will both be on-site during the training.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between border-t border-slate-800 text-xs font-mono text-slate-400 pt-2">
+                <span>HIGH TECH SPY AGENCY CONFIDENTIAL</span>
+                <span class="text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+        </section>
+
+
+        <!-- SECTION 3: OBJECTIVE -->
+        <section id="objective" class="relative bg-navy-800/80 border border-cyan-500/30 rounded-xl p-6 sm:p-10 shadow-xl space-y-8">
+            <div class="classified-stamp top-4 right-4">
+                <i data-feather="shield" class="w-3 h-3"></i> CONFIDENTIAL
+            </div>
+
+            <div class="border-b border-cyan-500/20 pb-4 flex justify-between items-end">
+                <div>
+                    <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">Section 02</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">2. Objective</h3>
+                </div>
+                <span class="font-mono text-xs text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+
+            <!-- Main Objective Description -->
+            <div class="bg-navy-900/60 border border-cyan-500/20 rounded-lg p-5">
+                <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+                    Your objective is to build an automated flow in Power Automate that reads encrypted intelligence from <code class="text-cyan-400 font-mono">FLOW_FILE.xlsx</code> and dispatches personalized emails to different field operatives (like Agent 002 and Agent 005 here today).
+                </p>
+            </div>
+
+            <!-- 3-Step Vertical Task Breakdown (Now Clickable Anchor Links) -->
+            <div class="space-y-4">
+                <!-- Task 1 -->
+                <a href="#caffe" class="block bg-navy-900/80 border border-cyan-500/20 hover:border-cyan-400 hover:bg-navy-900 transition-all rounded-lg p-5 cursor-pointer group">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="font-mono text-xl font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 group-hover:border-cyan-400 px-4 py-3 rounded min-w-[90px] text-center transition-colors">
+                            Task 1
+                        </div>
+                        <div class="flex-grow space-y-1">
+                            <div class="font-mono text-xs text-cyan-400 uppercase tracking-widest flex items-center justify-between">
+                                <span>Prompt Engineering Phase</span>
+                                <span class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-cyan-300">View C.A.F.F.E. Guide <i data-feather="arrow-right" class="w-3 h-3"></i></span>
+                            </div>
+                            <h4 class="font-bold text-white text-base group-hover:text-cyan-300 transition-colors">Draft the Prompt</h4>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                Open a chat with MAIA, our AI Cryptanalyst (choose model Claude). Collaborate with MAIA to construct a prompt using our C.A.F.F.E. Prompt Guide. <strong class="text-cyan-300">Tip:</strong> You can ask MAIA probing questions beforehand to refine the structure and details of the prompt.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Task 2 -->
+                <a href="#prompt-template" class="block bg-navy-900/80 border border-cyan-500/20 hover:border-cyan-400 hover:bg-navy-900 transition-all rounded-lg p-5 cursor-pointer group">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="font-mono text-xl font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 group-hover:border-cyan-400 px-4 py-3 rounded min-w-[90px] text-center transition-colors">
+                            Task 2
+                        </div>
+                        <div class="flex-grow space-y-1">
+                            <div class="font-mono text-xs text-cyan-400 uppercase tracking-widest flex items-center justify-between">
+                                <span>Verification Phase</span>
+                                <span class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-cyan-300">Validate Final Prompt <i data-feather="arrow-right" class="w-3 h-3"></i></span>
+                            </div>
+                            <h4 class="font-bold text-white text-base group-hover:text-cyan-300 transition-colors">Validate the Final Prompt</h4>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                Open a brand-new conversation with MAIA. Paste your final prompt to verify that her response matches the exact format and quality needed for the mission dispatches.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Task 3 -->
+                <a href="#build-flow" class="block bg-navy-900/80 border border-cyan-500/20 hover:border-cyan-400 hover:bg-navy-900 transition-all rounded-lg p-5 cursor-pointer group">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="font-mono text-xl font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 group-hover:border-cyan-400 px-4 py-3 rounded min-w-[90px] text-center transition-colors">
+                            Task 3
+                        </div>
+                        <div class="flex-grow space-y-1">
+                            <div class="font-mono text-xs text-cyan-400 uppercase tracking-widest flex items-center justify-between">
+                                <span>Automation Phase</span>
+                                <span class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-cyan-300">Build Flow <i data-feather="arrow-right" class="w-3 h-3"></i></span>
+                            </div>
+                            <h4 class="font-bold text-white text-base group-hover:text-cyan-300 transition-colors">Build the Power Automate Flow</h4>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                Launch Power Automate and build the automation following MAIA's technical recommendations. Test the completed flow to ensure all emails are drafted correctly. <strong class="text-amber-400">Obstacle Protocol:</strong> If you run into any technical roadblocks, consult Maia in that same conversation for real-time troubleshooting. You may ask Agent 002 and Agent 005 present for the training.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="flex items-center justify-between border-t border-slate-800 text-xs font-mono text-slate-400 pt-2">
+                <span>HIGH TECH SPY AGENCY CONFIDENTIAL</span>
+                <span class="text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+        </section>
+
+
+        <!-- SECTION 4: C.A.F.F.E. PROMPT GUIDE -->
+        <section id="caffe" class="relative bg-navy-800/80 border border-cyan-500/30 rounded-xl p-6 sm:p-10 shadow-xl space-y-8">
+            <div class="classified-stamp top-4 right-4">
+                <i data-feather="shield" class="w-3 h-3"></i> CONFIDENTIAL
+            </div>
+
+            <div class="border-b border-cyan-500/20 pb-4 flex justify-between items-end">
+                <div>
+                    <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">Section 03</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">3. Task 1: Draft the prompt</h3>
+                </div>
+                <span class="font-mono text-xs text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+
+            <!-- NEW INSTRUCTION BOX WITH OBJECTIVE REMINDER -->
+            <div class="bg-navy-900/90 border border-cyan-500/40 rounded-lg p-6 space-y-4 shadow-lg">
+                <div class="font-mono text-xs text-cyan-400 uppercase tracking-wider flex items-center gap-2 font-bold">
+                    <i data-feather="cpu" class="w-4 h-4"></i> Operative Instruction — AI Collaboration & Objective
+                </div>
+                <div class="bg-navy-950/80 border border-cyan-500/30 p-4 rounded-lg space-y-2">
+                    <span class="font-mono text-xs text-cyan-400 uppercase tracking-wider block font-bold">🎯 Objective Reminder</span>
+                    <p class="text-sm sm:text-base text-cyan-200 font-mono font-medium leading-relaxed">
+                        "Your objective is to build an automated workflow in Power Automate that generates automated planning communication emails for suppliers using data from the Excel file."
+                    </p>
+                </div>
+                <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-sans pt-2">
+                    Open a chat with MAIA, our AI Cryptanalyst (choose model – Claude). Collaborate with MAIA to construct a prompt using our C.A.F.F.E. Prompt Guide.
+                </p>
+                <div class="pt-2 border-t border-cyan-500/20 text-xs sm:text-sm text-cyan-300 font-mono flex items-start gap-2">
+                    <span class="text-cyan-400 font-bold shrink-0">Tip:</span>
+                    <span>You can ask MAIA probing questions beforehand to refine the structure and details of the prompt.</span>
+                </div>
+            </div>
+
+            <p class="text-slate-300 text-sm">
+                An effective prompt requires <strong class="text-white">5 essential sections</strong>. Here is the breakdown:
+            </p>
+
+            <!-- C.A.F.F.E. Acronym Cards -->
+            <div class="space-y-4">
+                <!-- C - CONTEXT -->
+                <div class="bg-navy-900/80 border border-cyan-500/20 hover:border-cyan-400/50 transition-all rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="font-mono text-3xl font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 w-16 h-16 rounded-lg flex items-center justify-center shrink-0">
+                        C
+                    </div>
+                    <div class="flex-grow space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 1</span>
+                            <span class="font-mono text-xs text-slate-400">CONTEXT</span>
+                        </div>
+                        <h4 class="font-bold text-white text-base">CONTEXT</h4>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Give it an expert role: Tell the AI who it is and in which context it operates. The more precise the role, the more relevant and appropriately toned the analysis will be (here: supply chain operation manager, not finance or HR). Additionally explain the context: Paste the name of the files it needs to use and give her an objective.
+                        </p>
+                        <div class="pt-1 text-xs text-cyan-300 font-mono bg-navy-950/60 p-2.5 rounded border border-cyan-500/20">
+                            <strong>Guiding questions:</strong> What role does the AI need to be? What's your objective? Where does it need to take info from other sources?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- A - ACTION -->
+                <div class="bg-navy-900/80 border border-cyan-500/20 hover:border-cyan-400/50 transition-all rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="font-mono text-3xl font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 w-16 h-16 rounded-lg flex items-center justify-center shrink-0">
+                        A
+                    </div>
+                    <div class="flex-grow space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 2</span>
+                            <span class="font-mono text-xs text-slate-400">ACTION</span>
+                        </div>
+                        <h4 class="font-bold text-white text-base">ACTION</h4>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Give it a mission: Describe precisely what you want the AI to do, step by step. Use clear action verbs: analyze, identify, compare, recommend, prioritize.
+                        </p>
+                        <div class="pt-1 text-xs text-cyan-300 font-mono bg-navy-950/60 p-2.5 rounded border border-cyan-500/20">
+                            <strong>Guiding question:</strong> What exactly do you want AI to do?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- F - FORMAT -->
+                <div class="bg-navy-900/80 border border-cyan-500/20 hover:border-cyan-400/50 transition-all rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="font-mono text-3xl font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 w-16 h-16 rounded-lg flex items-center justify-center shrink-0">
+                        F
+                    </div>
+                    <div class="flex-grow space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 3</span>
+                            <span class="font-mono text-xs text-slate-400">FORMAT</span>
+                        </div>
+                        <h4 class="font-bold text-white text-base">FORMAT</h4>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Specify exactly how you want to receive the response: table, numbered list, color coding, 3-line summary, details. The AI adapts to what you request.
+                        </p>
+                        <div class="pt-1 text-xs text-cyan-300 font-mono bg-navy-950/60 p-2.5 rounded border border-cyan-500/20">
+                            <strong>Guiding questions:</strong> What format: table, email, html, instructions? What tone or style?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- F - FILTERS -->
+                <div class="bg-navy-900/80 border border-cyan-500/20 hover:border-cyan-400/50 transition-all rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="font-mono text-3xl font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 w-16 h-16 rounded-lg flex items-center justify-center shrink-0">
+                        F
+                    </div>
+                    <div class="flex-grow space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 4</span>
+                            <span class="font-mono text-xs text-slate-400">FILTERS</span>
+                        </div>
+                        <h4 class="font-bold text-white text-base">FILTERS</h4>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Set the ground rules: maximum Power Automate steps, difficulty level, expected tone, length of response.
+                        </p>
+                        <div class="pt-1 text-xs text-cyan-300 font-mono bg-navy-950/60 p-2.5 rounded border border-cyan-500/20">
+                            <strong>Guiding questions:</strong> Do you have constraints? Specific rules to follow?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- E - EXAMPLE -->
+                <div class="bg-navy-900/80 border border-cyan-500/20 hover:border-cyan-400/50 transition-all rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="font-mono text-3xl font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 w-16 h-16 rounded-lg flex items-center justify-center shrink-0">
+                        E
+                    </div>
+                    <div class="flex-grow space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 5</span>
+                            <span class="font-mono text-xs text-slate-400">EXAMPLE</span>
+                        </div>
+                        <h4 class="font-bold text-white text-base">EXAMPLE</h4>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            If you have a file that already exists or a previous email of how it should work you may add it here. If not leave it blank.
+                        </p>
+                        <div class="pt-1 text-xs text-cyan-300 font-mono bg-navy-950/60 p-2.5 rounded border border-cyan-500/20">
+                            <strong>Guiding question:</strong> Do you have a concrete example of the type of response you expect?
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between border-t border-slate-800 text-xs font-mono text-slate-400 pt-2">
+                <span>HIGH TECH SPY AGENCY CONFIDENTIAL</span>
+                <span class="text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+        </section>
+
+
+        <!-- SECTION 5: TASK 2 - VALIDATE THE FINAL PROMPT -->
+        <section id="prompt-template" class="relative bg-navy-800/90 border-2 border-cyan-500/50 rounded-xl p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="classified-stamp top-4 right-4">
+                <i data-feather="shield-off" class="w-3 h-3 text-red-500"></i> DECLASSIFIED ON VERIFICATION
+            </div>
+
+            <div class="border-b border-cyan-500/30 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
+                <div>
+                    <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">Section 04 • Interactive Terminal</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">4. Task 2: Validate the Final Prompt</h3>
+                </div>
+                <span class="font-mono text-xs text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+
+            <!-- Explanatory note -->
+            <p class="text-slate-300 text-sm">
+                Here is the final prompt we advise using for the exercise. Do you have the password for the security terminal to unlock the task?
+            </p>
+
+            <!-- DECRYPTION CONTROL PANEL -->
+            <div id="terminal-panel" class="bg-navy-900 border border-cyan-500/40 rounded-xl p-6 space-y-4 shadow-inner">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2 font-mono text-xs text-cyan-400">
+                        <i data-feather="terminal" class="w-4 h-4"></i>
+                        <span>SECURITY TERMINAL // CLEARANCE REQUIRED</span>
+                    </div>
+                    <div id="decrypt-status" class="font-mono text-xs px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        <span>LOCKED — REDACTION ACTIVE</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 items-stretch">
+                    <div class="relative flex-grow">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-cyan-400 font-mono">
+                            >
+                        </span>
+                        <input type="text" id="passcode-input" placeholder="Enter access code..." 
+                            class="w-full bg-navy-950 border border-cyan-500/40 rounded-lg pl-8 pr-4 py-3 text-sm font-mono text-cyan-300 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 tracking-wider placeholder:text-slate-600 placeholder:normal-case placeholder:tracking-normal">
+                    </div>
+                    <button id="decrypt-btn" class="bg-cyan-500 hover:bg-cyan-400 text-navy-900 font-mono font-bold px-6 py-3 rounded-lg text-sm transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2">
+                        <i data-feather="unlock" class="w-4 h-4"></i>
+                        <span>DECIFRA</span>
+                    </button>
+                    <button id="reset-btn" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono px-4 py-3 rounded-lg text-sm transition-all border border-slate-700 flex items-center justify-center gap-1">
+                        <i data-feather="lock" class="w-4 h-4"></i>
+                        <span>RE-LOCK</span>
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- PROMPT TEMPLATE CONTAINER (REDACTED BY DEFAULT) -->
+            <div class="relative">
+                <!-- Dedicated Copy Prompt Button -->
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-mono text-xs text-cyan-400 tracking-wider uppercase flex items-center gap-1.5">
+                        <i data-feather="file-text" class="w-3.5 h-3.5"></i> Final Prompt Payload
+                    </span>
+                    <button id="copy-prompt-btn" class="bg-cyan-950 hover:bg-cyan-900 text-cyan-400 border border-cyan-500/40 hover:border-cyan-400 font-mono text-xs px-3.5 py-2 rounded-lg transition-all shadow flex items-center gap-2 group">
+                        <i data-feather="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                        <span id="copy-btn-text">COPY PROMPT</span>
+                    </button>
+                </div>
+
+                <div id="prompt-content-container" class="space-y-6 font-mono text-sm bg-navy-950/80 p-6 sm:p-8 rounded-xl border border-cyan-500/20">
+
+                    <!-- CONTEXT BLOCK -->
+                    <div class="space-y-2 border-b border-slate-800 pb-6">
+                        <div class="text-cyan-400 font-bold tracking-wider flex items-center gap-2">
+                            <span>▌</span> CONTEXT
+                        </div>
+                        <div class="pl-4 text-slate-300 space-y-3 leading-relaxed">
+                            <p class="redacted">You are a supply chain operations expert for a luxury maison. Design a simple, business-friendly Power Automate workflow using standard Microsoft connectors to generate standardized supplier email drafts from planning data. The workflow uses a single Excel file stored in SharePoint under: Documents > WORKSHOP AUTOMATE AI > FILE_FLOW.xlsx, containing an Excel table named "FlowSS27" with exactly the following columns: SEASON, COLL, SKU, DESCRIPTION, SUPPLIER, EMAIL, LAUNCH W, LAUNCH NEED W, BUYING, LAUNCH NEED, REAPPRO, FLEX, PO (where EMAIL contains the supplier email address directly on each row).</p>
+                            <p class="font-bold text-cyan-300 pt-2">Objective:</p>
+                            <ul class="list-disc list-inside space-y-1.5 text-slate-300">
+                                <li class="redacted">Read planning data directly from the "FlowSS27" table in FILE_FLOW.xlsx (which already includes the supplier email address on each row in the EMAIL column).</li>
+                                <li class="redacted">Loop through each planning row.</li>
+                                <li class="redacted">Populate a fixed, standard email template with the row's data (no AI-generated text).</li>
+                                <li class="redacted">Produce the email in two blocks within the same message: Italian version first, English version underneath. Each block must contain: Season, Collection, SKU, Description, Launch W, Launch Need W, Buying, Launch Need, Reappro, Flex, PO.</li>
+                                <li class="redacted">Save each generated email directly into the user's Outlook Drafts folder (no automated sending, no human approval steps required).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- ACTION BLOCK -->
+                    <div class="space-y-2 border-b border-slate-800 pb-6">
+                        <div class="text-cyan-400 font-bold tracking-wider flex items-center gap-2">
+                            <span>▌</span> ACTION
+                        </div>
+                        <div class="pl-4 text-slate-300 space-y-2 leading-relaxed">
+                            <p class="redacted">Design the complete Power Automate flow architecture step by step. For each main step, specify:</p>
+                            <ul class="list-disc list-inside space-y-1.5 text-slate-300 pt-1">
+                                <li class="redacted">Trigger / Action type: the exact Power Automate trigger, connector, or action</li>
+                                <li class="redacted">Explanation: what the step does</li>
+                                <li class="redacted">Action details: the specific configuration or data to insert</li>
+                                <li class="redacted">Expected output: what the step produces for the next stage</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- FORMAT BLOCK -->
+                    <div class="space-y-2 border-b border-slate-800 pb-6">
+                        <div class="text-cyan-400 font-bold tracking-wider flex items-center gap-2">
+                            <span>▌</span> FORMAT
+                        </div>
+                        <div class="pl-4 text-slate-300 space-y-2 leading-relaxed">
+                            <p class="redacted">Structure your response exactly as follows:</p>
+                            <ol class="list-decimal list-inside space-y-2 pt-1 text-slate-300">
+                                <li class="redacted">EXCEL FILES FORMATTING (Explain any assumptions required if the Excel file is not already formatted as a proper Excel table named "FlowSS27" with clean column headers matching: SEASON, COLL, SKU, DESCRIPTION, SUPPLIER, EMAIL, LAUNCH W, LAUNCH NEED W, BUYING, LAUNCH NEED, REAPPRO, FLEX, PO. No lookup formula is needed since the EMAIL column is directly present in the file.)</li>
+                                <li class="redacted">POWER AUTOMATE FLOW STRUCTURE (For each step: Action/Trigger | Explanation | Action Details | Expected Output)</li>
+                                <li class="redacted">EXAMPLE SUPPLIER EMAIL (show the Italian block, then the English block, both populated with sample SEASON, COLL, SKU, DESCRIPTION, LAUNCH W, LAUNCH NEED W, BUYING, LAUNCH NEED, REAPPRO, FLEX, PO data)</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- FILTERS BLOCK -->
+                    <div class="space-y-2">
+                        <div class="text-cyan-400 font-bold tracking-wider flex items-center gap-2">
+                            <span>▌</span> FILTERS
+                        </div>
+                        <div class="pl-4 text-slate-300 space-y-2 leading-relaxed">
+                            <ul class="list-disc list-inside space-y-2 text-slate-300">
+                                <li class="redacted">Keep the solution simple, short and accessible for non-technical business users. Maximum 4 steps.</li>
+                                <li class="redacted">Use only standard Microsoft 365 / Power Automate actions (Excel Online (Business), SharePoint, Outlook Draft actions) — do not use AI Builder, Azure OpenAI, or Copilot actions.</li>
+                                <li class="redacted">The email body must be a fixed, standard template, not AI-written; dynamic content is limited to inserting retrieved data values into the template. It should contain both language versions: Italian first, English underneath, same structure and same data.</li>
+                                <li class="redacted">Factual data (SEASON, COLL, SKU, DESCRIPTION, SUPPLIER, EMAIL, LAUNCH W, LAUNCH NEED W, BUYING, LAUNCH NEED, REAPPRO, FLEX, PO) must come strictly from the "FlowSS27" table in FILE_FLOW.xlsx and must never be invented or altered.</li>
+                                <li class="redacted">Do not include complex array filtering, distinct unions, filtering the excel file for missing info or manual approval gates; rely on a streamlined row-by-row loop that saves directly to Outlook Drafts.</li>
+                                <li class="redacted">Use the Outlook draft action (e.g., Draft an email message) so emails sit in the Drafts folder for manual review and sending, do not compose just write the email directly in Draft message.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Closing Note -->
+            <div class="bg-navy-900/80 border border-cyan-500/20 rounded-lg p-4 font-sans text-sm text-slate-300">
+                Open a brand-new conversation with MAIA - Claude. Paste your final prompt to verify that her response matches the exact format and quality needed for the mission dispatches.
+            </div>
+
+            <div class="flex items-center justify-between border-t border-slate-800 text-xs font-mono text-slate-400 pt-2">
+                <span>HIGH TECH SPY AGENCY CONFIDENTIAL</span>
+                <span class="text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+        </section>
+
+
+        <!-- SECTION 6: TASK 3 - BUILD THE POWER AUTOMATE FLOW -->
+        <section id="build-flow" class="relative bg-navy-800/80 border border-cyan-500/30 rounded-xl p-6 sm:p-10 shadow-xl space-y-8">
+            <div class="classified-stamp top-4 right-4">
+                <i data-feather="shield" class="w-3 h-3"></i> CONFIDENTIAL
+            </div>
+
+            <div class="border-b border-cyan-500/20 pb-4 flex justify-between items-end">
+                <div>
+                    <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">Section 05</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">5. Task 3: Build the Power Automate Flow</h3>
+                </div>
+                <span class="font-mono text-xs text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+
+            <div class="bg-navy-900/60 border border-cyan-500/20 rounded-lg p-5 space-y-4 font-sans text-slate-200">
+                <p class="text-base leading-relaxed">
+                    Launch Power Automate and build the automation following MAIA's technical recommendations. Test the completed flow to ensure all emails are drafted correctly.
+                </p>
+                <!-- Power Automate Portal Link Button -->
+                <div class="pt-3">
+                    <a href="https://make.powerautomate.com/environments/Default-8bbff09f-621e-44c4-a92c-da664a64ac6d/home?" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-navy-900 font-mono font-bold px-5 py-3 rounded-lg text-sm transition-all shadow-lg shadow-cyan-500/20">
+                        <i data-feather="external-link" class="w-4 h-4"></i>
+                        <span>Launch Power Automate Portal</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Obstacle Protocol Highlighted Callout -->
+            <div class="bg-amber-500/10 border-l-4 border-amber-500 p-5 rounded-r-lg space-y-2 font-sans text-slate-200">
+                <div class="font-mono text-xs text-amber-400 uppercase tracking-wider flex items-center gap-2 font-bold">
+                    <i data-feather="alert-triangle" class="w-4 h-4"></i> Obstacle Protocol
+                </div>
+                <p class="text-sm leading-relaxed text-slate-300">
+                    If you run into any technical roadblocks, consult Maia in that same conversation for real-time troubleshooting. You may ask Agent 002 and Agent 005 present for the training.
+                </p>
+            </div>
+
+            <div class="flex items-center justify-between border-t border-slate-800 text-xs font-mono text-slate-400 pt-2">
+                <span>HIGH TECH SPY AGENCY CONFIDENTIAL</span>
+                <span class="text-cyan-400">OFFICIAL DOSSIER</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 border-t border-cyan-500/20 py-8 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-400">
+            <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                <span>MISSION: M.A.L.V. — Mission Automation & Logistics Vanguard</span>
+            </div>
+            <div>
+                HIGH TECH SPY AGENCY CONFIDENTIAL • ALL RIGHTS RESERVED
+            </div>
+        </div>
+    </footer>
+
+    <!-- Feather Icons Init & Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+
+            // Decryption Logic
+            const passcodeInput = document.getElementById('passcode-input');
+            const decryptBtn = document.getElementById('decrypt-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const decryptStatus = document.getElementById('decrypt-status');
+            const promptContainer = document.getElementById('prompt-content-container');
+            const terminalPanel = document.getElementById('terminal-panel');
+
+            function handleDecrypt() {
+                const val = passcodeInput.value.trim();
+                if (val === 'PowerAutomateIsCool') {
+                    promptContainer.classList.add('revealed');
+                    decryptStatus.className = 'font-mono text-xs px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5';
+                    decryptStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>ACCESS GRANTED — DECRYPTION SUCCESSFUL</span>';
+                    terminalPanel.classList.remove('border-cyan-500/40', 'border-red-500/50');
+                    terminalPanel.classList.add('border-emerald-500/60');
+                    passcodeInput.disabled = true;
+                    decryptBtn.classList.add('hidden');
+                    resetBtn.classList.remove('hidden');
+                } else {
+                    // Access Denied Shake & Error
+                    terminalPanel.classList.add('border-red-500');
+                    decryptStatus.className = 'font-mono text-xs px-2.5 py-1 rounded bg-red-500/10 text-red-400 border border-red-500/30 flex items-center gap-1.5';
+                    decryptStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span><span>ACCESS DENIED — INVALID CODE</span>';
+                    
+                    setTimeout(() => {
+                        terminalPanel.classList.remove('border-red-500');
+                    }, 1000);
+                }
+            }
+
+            function handleReset() {
+                promptContainer.classList.remove('revealed');
+                decryptStatus.className = 'font-mono text-xs px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center gap-1.5';
+                decryptStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>LOCKED — REDACTION ACTIVE</span>';
+                terminalPanel.classList.remove('border-emerald-500/60');
+                terminalPanel.classList.add('border-cyan-500/40');
+                passcodeInput.value = '';
+                passcodeInput.disabled = false;
+                decryptBtn.classList.remove('hidden');
+                resetBtn.classList.add('hidden');
+            }
+
+            decryptBtn.addEventListener('click', handleDecrypt);
+            resetBtn.addEventListener('click', handleReset);
+            passcodeInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleDecrypt();
+                }
+            });
+
+            // Copy Prompt Logic (Updated with exact new prompt text containing "FlowSS27")
+            const copyPromptBtn = document.getElementById('copy-prompt-btn');
+            const copyBtnText = document.getElementById('copy-btn-text');
+
+            const fullPromptText = 
+`CONTEXT:
+You are a supply chain operations expert for a luxury maison. Design a simple, business-friendly Power Automate workflow using standard Microsoft connectors to generate standardized supplier email drafts from planning data. The workflow uses a single Excel file stored in SharePoint under: Documents > WORKSHOP AUTOMATE AI > FILE_FLOW.xlsx, containing an Excel table named "FlowSS27" with exactly the following columns: SEASON, COLL, SKU, DESCRIPTION, SUPPLIER, EMAIL, LAUNCH W, LAUNCH NEED W, BUYING, LAUNCH NEED, REAPPRO, FLEX, PO (where EMAIL contains the supplier email address directly on each row).
+
+OBJECTIVE:
+- Read planning data directly from the "FlowSS27" table in FILE_FLOW.xlsx (which already includes the supplier email address on each row in the EMAIL column).
+- Loop through each planning row.
+- Populate a fixed, standard email template with the row's data (no AI-generated text).
+- Produce the email in two blocks within the same message: Italian version first, English version underneath. Each block must contain: Season, Collection, SKU, Description, Launch W, Launch Need W, Buying, Launch Need, Reappro, Flex, PO.
+- Save each generated email directly into the user's Outlook Drafts folder (no automated sending, no human approval steps required).
+
+ACTION:
+Design the complete Power Automate flow architecture step by step. For each main step, specify:
+- Trigger / Action type: the exact Power Automate trigger, connector, or action
+- Explanation: what the step does
+- Action details: the specific configuration or data to insert
+- Expected output: what the step produces for the next stage
+
+FORMAT:
+Structure your response exactly as follows:
+1. EXCEL FILES FORMATTING (Explain any assumptions required if the Excel file is not already formatted as a proper Excel table named "FlowSS27" with clean column headers matching: SEASON, COLL, SKU, DESCRIPTION, SUPPLIER, EMAIL, LAUNCH W, LAUNCH NEED W, BUYING, LAUNCH NEED, REAPPRO, FLEX, PO. No lookup formula is needed since the EMAIL column is directly present in the file.)
+2. POWER AUTOMATE FLOW STRUCTURE (For each step: Action/Trigger | Explanation | Action Details | Expected Output)
+3. EXAMPLE SUPPLIER EMAIL (show the Italian block, then the English block, both populated with sample SEASON, COLL, SKU, DESCRIPTION, LAUNCH W, LAUNCH NEED W, BUYING, LAUNCH NEED, REAPPRO, FLEX, PO data)
+
+FILTERS:
+- Keep the solution simple, short and accessible for non-technical business users. Maximum 4 steps.
+- Use only standard Microsoft 365 / Power Automate actions (Excel Online (Business), SharePoint, Outlook Draft actions) — do not use AI Builder, Azure OpenAI, or Copilot actions.
+- The email body must be a fixed, standard template, not AI-written; dynamic content is limited to inserting retrieved data values into the template. It should contain both language versions: Italian first, English underneath, same structure and same data.
+- Factual data (SEASON, COLL, SKU, DESCRIPTION, SUPPLIER, EMAIL, LAUNCH W, LAUNCH NEED W, BUYING, LAUNCH NEED, REAPPRO, FLEX, PO) must come strictly from the "FlowSS27" table in FILE_FLOW.xlsx and must never be invented or altered.
+- Do not include complex array filtering, distinct unions, filtering the excel file for missing info or manual approval gates; rely on a streamlined row-by-row loop that saves directly to Outlook Drafts.
+- Use the Outlook draft action (e.g., Draft an email message) so emails sit in the Drafts folder for manual review and sending, do not compose just write the email directly in Draft message.`;
+
+            copyPromptBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(fullPromptText);
+                    copyBtnText.textContent = 'COPIED!';
+                    copyPromptBtn.classList.remove('bg-cyan-950', 'text-cyan-400', 'border-cyan-500/40');
+                    copyPromptBtn.classList.add('bg-emerald-500', 'text-navy-900', 'border-emerald-400', 'font-bold');
+                    
+                    // Replace icon with check
+                    const iconEl = copyPromptBtn.querySelector('i');
+                    if (iconEl) {
+                        iconEl.setAttribute('data-feather', 'check');
+                        feather.replace();
+                    }
+
+                    setTimeout(() => {
+                        copyBtnText.textContent = 'COPY PROMPT';
+                        copyPromptBtn.classList.remove('bg-emerald-500', 'text-navy-900', 'border-emerald-400', 'font-bold');
+                        copyPromptBtn.classList.add('bg-cyan-950', 'text-cyan-400', 'border-cyan-500/40');
+                        if (iconEl) {
+                            iconEl.setAttribute('data-feather', 'copy');
+                            feather.replace();
+                        }
+                    }, 2500);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
