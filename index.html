@@ -466,7 +466,7 @@
                 <div class="bg-navy-950/80 border border-cyan-500/30 p-4 rounded-lg space-y-2">
                     <span class="font-mono text-xs text-cyan-400 uppercase tracking-wider block font-bold">🎯 Objective Reminder</span>
                     <p class="text-sm sm:text-base text-cyan-200 font-mono font-medium leading-relaxed">
-                        "Your objective is to build an automated flow in Power Automate that generates automated planning communication emails for suppliers using data from the Excel file."
+                        "Your objective is to build an automated workflow in Power Automate that generates automated planning communication emails for suppliers using data from the Excel file."
                     </p>
                 </div>
                 <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-sans pt-2">
@@ -497,7 +497,6 @@
                         <div class="flex-grow space-y-1 pr-24">
                             <div class="flex items-center justify-between">
                                 <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 1</span>
-                                <span class="font-mono text-xs text-slate-400">CONTEXT</span>
                             </div>
                             <h4 class="font-bold text-white text-base">CONTEXT</h4>
                             <p class="text-xs text-slate-400">Define who the AI is and what data source it accesses.</p>
@@ -523,7 +522,6 @@
                         <div class="flex-grow space-y-1 pr-24">
                             <div class="flex items-center justify-between">
                                 <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 2</span>
-                                <span class="font-mono text-xs text-slate-400">ACTION</span>
                             </div>
                             <h4 class="font-bold text-white text-base">ACTION</h4>
                             <p class="text-xs text-slate-400">Specify step-by-step instructions for the AI.</p>
@@ -549,7 +547,6 @@
                         <div class="flex-grow space-y-1 pr-24">
                             <div class="flex items-center justify-between">
                                 <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 3</span>
-                                <span class="font-mono text-xs text-slate-400">FORMAT</span>
                             </div>
                             <h4 class="font-bold text-white text-base">FORMAT</h4>
                             <p class="text-xs text-slate-400">Define how the output response should be structured.</p>
@@ -575,7 +572,6 @@
                         <div class="flex-grow space-y-1 pr-24">
                             <div class="flex items-center justify-between">
                                 <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 4</span>
-                                <span class="font-mono text-slate-400 text-xs">FILTERS</span>
                             </div>
                             <h4 class="font-bold text-white text-base">FILTERS</h4>
                             <p class="text-xs text-slate-400">Set ground rules and technical constraints.</p>
@@ -601,7 +597,6 @@
                         <div class="flex-grow space-y-1 pr-24">
                             <div class="flex items-center justify-between">
                                 <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest">C.A.F.F.E. Step 5</span>
-                                <span class="font-mono text-xs text-slate-400">EXAMPLE</span>
                             </div>
                             <h4 class="font-bold text-white text-base">EXAMPLE</h4>
                             <p class="text-xs text-slate-400">Provide a sample reference or leave blank if none.</p>
@@ -829,6 +824,30 @@
     </footer>
 
     <!-- Feather Icons Init & Logic -->
+    <!-- SECURITY CHECK MODAL (C.A.F.F.E. cards) -->
+    <div id="security-modal" class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/80 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="security-modal-title">
+        <div class="relative w-full max-w-md bg-navy-900 border-2 border-red-500/60 rounded-xl shadow-2xl p-6 space-y-4 font-mono">
+            <div class="flex items-center justify-between text-xs uppercase tracking-widest">
+                <span class="text-red-400 font-bold flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>SECURITY CHECKPOINT</span>
+                <span class="text-slate-400">LEVEL: EYES ONLY</span>
+            </div>
+            <h4 id="security-modal-title" class="text-lg font-bold text-white uppercase tracking-wide">Access to classified intel</h4>
+            <p class="text-sm text-slate-200 leading-relaxed font-sans">
+                Agent, this file contains the answer for <span id="security-modal-target" class="text-gold-400 font-mono font-bold">—</span>.
+                Before we unseal it: <strong class="text-white">have you really thought long enough with your team?</strong>
+                Peeking too early voids your cover. Confirm your clearance.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button id="security-cancel" type="button" class="flex-1 px-4 py-2.5 rounded-lg border border-slate-600 text-slate-300 hover:border-cyan-400 hover:text-cyan-400 text-xs uppercase tracking-wider transition-colors">
+                    ✖ Abort — I keep thinking
+                </button>
+                <button id="security-confirm" type="button" class="flex-1 px-4 py-2.5 rounded-lg border border-emerald-500/60 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 text-xs uppercase tracking-wider font-bold transition-colors">
+                    ✔ Affirmative — unseal intel
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             feather.replace();
@@ -928,22 +947,60 @@
 
             // Interactive C.A.F.F.E. Cards Functionality
             const caffeCards = document.querySelectorAll('.caffe-card');
+            const securityModal = document.getElementById('security-modal');
+            const securityTarget = document.getElementById('security-modal-target');
+            let pendingCard = null;
+
+            function setCardOpen(card, open) {
+                const answer = card.querySelector('.caffe-answer');
+                const chevron = card.querySelector('.chevron-icon');
+                const hintText = card.querySelector('.click-hint-text');
+                if (open) {
+                    answer.classList.remove('hidden');
+                    card.classList.add('border-cyan-400', 'bg-navy-900');
+                    if (chevron) chevron.style.transform = 'rotate(180deg)';
+                    if (hintText) hintText.textContent = 'Click to hide';
+                } else {
+                    answer.classList.add('hidden');
+                    card.classList.remove('border-cyan-400', 'bg-navy-900');
+                    if (chevron) chevron.style.transform = 'rotate(0deg)';
+                    if (hintText) hintText.textContent = 'Click to expand';
+                }
+            }
+
+            function openSecurityModal(card) {
+                pendingCard = card;
+                const title = card.querySelector('h4');
+                securityTarget.textContent = title ? title.textContent.trim() : 'this section';
+                securityModal.classList.remove('hidden');
+                securityModal.classList.add('flex');
+            }
+
+            function closeSecurityModal() {
+                securityModal.classList.add('hidden');
+                securityModal.classList.remove('flex');
+                pendingCard = null;
+            }
+
+            document.getElementById('security-confirm').addEventListener('click', () => {
+                if (pendingCard) setCardOpen(pendingCard, true);
+                closeSecurityModal();
+            });
+            document.getElementById('security-cancel').addEventListener('click', closeSecurityModal);
+            securityModal.addEventListener('click', (e) => {
+                if (e.target === securityModal) closeSecurityModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && pendingCard) closeSecurityModal();
+            });
+
             caffeCards.forEach(card => {
                 card.addEventListener('click', () => {
                     const answer = card.querySelector('.caffe-answer');
-                    const chevron = card.querySelector('.chevron-icon');
-                    const hintText = card.querySelector('.click-hint-text');
-
                     if (answer.classList.contains('hidden')) {
-                        answer.classList.remove('hidden');
-                        card.classList.add('border-cyan-400', 'bg-navy-900');
-                        if (chevron) chevron.style.transform = 'rotate(180deg)';
-                        if (hintText) hintText.textContent = 'Click to hide';
+                        openSecurityModal(card);
                     } else {
-                        answer.classList.add('hidden');
-                        card.classList.remove('border-cyan-400', 'bg-navy-900');
-                        if (chevron) chevron.style.transform = 'rotate(0deg)';
-                        if (hintText) hintText.textContent = 'Click to expand';
+                        setCardOpen(card, false);
                     }
                 });
             });
